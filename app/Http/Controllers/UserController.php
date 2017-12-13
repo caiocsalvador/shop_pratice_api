@@ -10,20 +10,23 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 class UserController extends Controller {
 
     public function signup(request $request){
+        // Validate the request
         $this->validate($request, [
             'name' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required'
         ]);
 
+        //Create a new user
         $user = new User([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'password' => bcrypt($request->input('password'))
         ]);
-
+        
         $user->save();
 
+        //Return a success response
         return response()->json([
             'message' => 'Successfully created user'
         ], 201);
@@ -31,6 +34,7 @@ class UserController extends Controller {
 
     public function signin(request $request){
 
+        // Validate the request
         $this->validate($request, [
             'email' => 'required|email',
             'password' => 'required'
@@ -53,30 +57,5 @@ class UserController extends Controller {
         $user = JWTAuth::toUser($token);
         return response()->json(compact('token', 'user'), 200);
     }
-
-    /*public function getAuthenticatedUser(){
-        try {
-
-            if (! $user = JWTAuth::parseToken()->authenticate()) {
-                return response()->json(['user_not_found'], 404);
-            }
-
-        } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
-
-            return response()->json(['token_expired'], $e->getStatusCode());
-
-        } catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
-
-            return response()->json(['token_invalid'], $e->getStatusCode());
-
-        } catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
-
-            return response()->json(['token_absent'], $e->getStatusCode());
-
-        }
-
-        // the token is valid and we have found the user via the sub claim
-        return $user;
-    }*/
 
 }

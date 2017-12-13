@@ -14,6 +14,7 @@ class Shopping extends Model
         return $this->belongsTo('App\User');
     }
 
+    //Many to Many relationship
     public function products(){
         return $this->belongsToMany('App\Product');
     }
