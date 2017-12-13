@@ -27,5 +27,10 @@ Route::post('/user/signin',[
 
 Route::get('/products',[
     'uses' => 'ProductController@getProducts',
+    //'middleware' => 'auth.jwt'
+]);
+
+Route::post('/shopping',[
+    'uses' => 'ShoppingController@store',
     'middleware' => 'auth.jwt'
 ]);
